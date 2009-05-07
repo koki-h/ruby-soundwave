@@ -180,7 +180,7 @@ class Wave
 
   def add(other) #別のWaveの波形と合成する
     unless other.class == self.class 
-      raise "Cannot Synthesize. Both files need to be WAVE." 
+      raise "Cannot add. Both files need to be WAVE." 
     end
     new_w = self.copy
     data_arraysize = [@data_body.size,other.data_body.size].max
@@ -198,7 +198,7 @@ class Wave
 
   def sub(other) #各サンプルの値を別のWaveの対応する値で減算する
     unless other.class == self.class 
-      raise "Cannot Synthesize. Both files need to be WAVE." 
+      raise "Cannot substruct. Both files need to be WAVE." 
     end
     new_w = self.copy
     data_arraysize = [@data_body.size,other.data_body.size].max
