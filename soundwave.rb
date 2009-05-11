@@ -249,13 +249,29 @@ class Wave
     end
     self
   end
-  
-  def make_sqare(freq,amp,time) #データを矩形波にする(周波数、振幅、時間)
+
+  def make_square(freq,amp,time) #データを矩形波にする(周波数、振幅、時間)
     @time = time
     body_size  = time * @sample_rate
     @data_body = Array.new(body_size,0)
     @data_size = body_size * @block_size
-    @data_body.each_index do |i|
+    sample_per_freq = @sample_rate / freq
+    @data_body.each_index do |i| #真の矩形波
+      if i % sample_per_freq < sample_per_freq / 2  
+        @data_body[i] = amp * 32768 * @channel_num
+      else
+        @data_body[i] = -amp * 32768 * @channel_num
+      end
+    end
+    self
+  end
+  
+  def make_sin_square(freq,amp,time) #データを矩形波にする(周波数、振幅、時間)
+    @time = time
+    body_size  = time * @sample_rate
+    @data_body = Array.new(body_size,0)
+    @data_size = body_size * @block_size
+    @data_body.each_index do |i| #sin波を重ね合わせて矩形波にする
       1.upto(15) do |n|
         if n % 2 == 1
           @data_body[i] += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) * 32768 * @channel_num

@@ -1,2 +1,2 @@
 require 'soundwave.rb'
-Wave.new.make_sqare(250,0.25 ,1).save('sqare.wav')
+Wave.new.make_square(250,0.25 ,1).save('square.wav')
