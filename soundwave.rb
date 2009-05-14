@@ -244,7 +244,23 @@ class Wave
   end
 
   def make_saw(freq, amp, time) #データをノコギリ波にする(周波数、振幅、時間)
+    sample_per_freq = @sample_rate / freq
+    peak_pos = sample_per_freq / 2 #波形のピークの位置
+    val_per_sample = amp / peak_pos
+    exp = lambda {|i| 
+      val = val_per_sample * (i % peak_pos)  
+      if i % sample_per_freq < peak_pos
+        val  
+      else
+        val - amp 
+      end
+    }
+    make_wave(time, exp)
+  end
+
+  def make_sin_saw(freq, amp, time) #データをノコギリ波にする(周波数、振幅、時間)
     exp = lambda{|i| 
+      #sinの掛けあわせでノコギリ波を作る
       val = 0
       1.upto(15) do |n|
         val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate)
@@ -256,8 +272,9 @@ class Wave
 
   def make_square(freq, amp, time) #データを矩形波にする(周波数、振幅、時間)
     sample_per_freq = @sample_rate / freq
+    peak_pos = sample_per_freq / 2 #波形のピークの位置
     exp = lambda {|i| 
-      if i % sample_per_freq < sample_per_freq / 2  
+      if i % sample_per_freq < peak_pos
         amp
       else
         -amp
@@ -268,6 +285,7 @@ class Wave
   
   def make_sin_square(freq, amp, time) #データを矩形波にする(周波数、振幅、時間)
     exp = lambda{|i| 
+      #sinの掛けあわせで矩形波を作る
       val = 0
       1.upto(15) do |n|
         val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) if n % 2 == 1
