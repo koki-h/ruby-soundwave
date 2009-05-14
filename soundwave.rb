@@ -226,58 +226,54 @@ class Wave
     new_w
   end
 
-  def make_sin(freq, amp, time) #データをサイン波にする(周波数、振幅、時間)
+  def make_wave(time, exp) #波形作成の共通処理
     @time = time
     body_size  = time * @sample_rate
     @data_body = Array.new(body_size)
     @data_size = body_size * @block_size
     @data_body.each_index do |i|
-      @data_body[i] = amp * sin(2.0 * PI * freq * i / @sample_rate) * 32768 * @channel_num
+      @data_body[i] = exp.call(i)
+      @data_body[i] *= 32768 * @channel_num
     end
     self
   end
 
-  def make_saw(freq,amp,time) #データをノコギリ波にする(周波数、振幅、時間)
-    @time = time
-    body_size  = time * @sample_rate
-    @data_body = Array.new(body_size,0)
-    @data_size = body_size * @block_size
-    @data_body.each_index do |i|
+  def make_sin(freq, amp, time) #データをサイン波にする(周波数、振幅、時間)
+    exp = lambda {|i| amp * sin(2.0 * PI * freq * i / @sample_rate)}
+    make_wave(time, exp)
+  end
+
+  def make_saw(freq, amp, time) #データをノコギリ波にする(周波数、振幅、時間)
+    exp = lambda{|i| 
+      val = 0
       1.upto(15) do |n|
-        @data_body[i] += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) * 32768 * @channel_num
+        val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate)
       end
-    end
-    self
+      val
+    }
+    make_wave(time, exp)
   end
 
-  def make_square(freq,amp,time) #データを矩形波にする(周波数、振幅、時間)
-    @time = time
-    body_size  = time * @sample_rate
-    @data_body = Array.new(body_size,0)
-    @data_size = body_size * @block_size
+  def make_square(freq, amp, time) #データを矩形波にする(周波数、振幅、時間)
     sample_per_freq = @sample_rate / freq
-    @data_body.each_index do |i| #真の矩形波
+    exp = lambda {|i| 
       if i % sample_per_freq < sample_per_freq / 2  
-        @data_body[i] = amp * 32768 * @channel_num
+        amp
       else
-        @data_body[i] = -amp * 32768 * @channel_num
+        -amp
       end
-    end
-    self
+    }
+    make_wave(time, exp)
   end
   
-  def make_sin_square(freq,amp,time) #データを矩形波にする(周波数、振幅、時間)
-    @time = time
-    body_size  = time * @sample_rate
-    @data_body = Array.new(body_size,0)
-    @data_size = body_size * @block_size
-    @data_body.each_index do |i| #sin波を重ね合わせて矩形波にする
+  def make_sin_square(freq, amp, time) #データを矩形波にする(周波数、振幅、時間)
+    exp = lambda{|i| 
+      val = 0
       1.upto(15) do |n|
-        if n % 2 == 1
-          @data_body[i] += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) * 32768 * @channel_num
-        end
+        val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) if n % 2 == 1
       end
-    end
-    self
+      val
+    }
+    make_wave(time, exp)
   end
 end
