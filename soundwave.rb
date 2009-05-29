@@ -208,6 +208,7 @@ class Wave
       val2 = other.data_body[i] || 0
       new_val = val1 - val2
       new_w.data_body[i] = new_val
+#      printf "%d:%d:%d\n", val1, val2, new_val
     end
     new_w.data_size = new_w.data_body.size * new_w.block_size
     new_w.time      =  new_w.data_size / new_w.data_speed.to_f
@@ -224,6 +225,11 @@ class Wave
     new_w.data_size = new_w.data_body.size * new_w.block_size
     new_w.time      =  new_w.data_size / new_w.data_speed.to_f
     new_w
+  end
+
+  def reverse!
+    self.data_body.reverse!
+    self
   end
 
   def make_wave(time, exp) #波形作成の共通処理
