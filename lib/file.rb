@@ -1,5 +1,5 @@
-#WAVEãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æã™ã‚‹
-#dumpã—ãŸçµæœã‚’æŠ˜ã‚Œç·šã‚°ãƒ©ãƒ•ãªã©ã«ã™ã‚Œã°æ³¢å½¢ã‚’è¦‹ã‚‹ã“ã¨ãŒå‡ºæ¥ã‚‹
+#WAVEƒtƒ@ƒCƒ‹‚ğ‰ğÍ‚·‚é
+#dump‚µ‚½Œ‹‰Ê‚ğÜ‚êüƒOƒ‰ƒt‚È‚Ç‚É‚·‚ê‚Î”gŒ`‚ğŒ©‚é‚±‚Æ‚ªo—ˆ‚é
 require 'pp'
 include Math
 
@@ -26,23 +26,23 @@ end
 class Wave
   #reference : http://www.kk.iij4u.or.jp/~kondo/wave/
   attr_accessor( 
-    :riff_header   , #4 byte R' 'I' 'F' 'F'  	RIFFãƒ˜ãƒƒãƒ€  	ã€€
-    :file_size     , #4 byte ã“ã‚Œä»¥é™ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º (ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º - 8) 	ã€€ 	ã€€
-    :wave_header   , #4 byte W' 'A' 'V' 'E' 	WAVEãƒ˜ãƒƒãƒ€ 	RIFFã®ç¨®é¡ãŒWAVEã§ã‚ã‚‹ã“ã¨ã‚’ã‚ã‚‰ã‚ã™
-    :fmt_difinit   , #4 byte f' 'm' 't' ' ' (â†ã‚¹ãƒšãƒ¼ã‚¹ã‚‚å«ã‚€) 	fmt ãƒãƒ£ãƒ³ã‚¯ 	ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å®šç¾©
-    :fmt_size      , #4 byte ãƒã‚¤ãƒˆæ•° 	fmt ãƒãƒ£ãƒ³ã‚¯ã®ãƒã‚¤ãƒˆæ•° 	ãƒªãƒ‹ã‚¢PCM ãªã‚‰ã° 16(10 00 00 00)
-    :fmt_id        , #2 byte ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆID ãƒªãƒ‹ã‚¢PCM ãªã‚‰ã° 1(01 00)
-    :channel_num   , #2 byte ãƒãƒ£ãƒ³ãƒãƒ«æ•°	ãƒ¢ãƒãƒ©ãƒ« ãªã‚‰ã° 1(01 00) ã‚¹ãƒ†ãƒ¬ã‚ª ãªã‚‰ã° 2(02 00)
-    :sample_rate   , #4 byte ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ãƒ¬ãƒ¼ãƒˆ	Hz 	44.1kHz ãªã‚‰ã° 44100(44 AC 00 00)
-    :data_speed    , #4 byte ãƒ‡ãƒ¼ã‚¿é€Ÿåº¦ (Byte/sec)44.1kHz 16bit ã‚¹ãƒ†ãƒ¬ã‚ª ãªã‚‰ã° 44100Ã—2Ã—2 = 176400(10 B1 02 00)
-    :block_size    , #2 byte ãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º (Byte/sampleÃ—ãƒãƒ£ãƒ³ãƒãƒ«æ•°)	16bit ã‚¹ãƒ†ãƒ¬ã‚ª ãªã‚‰ã° 2Ã—2 = 4(04 00)
-    :bit_per_sample, #2 byte ã‚µãƒ³ãƒ—ãƒ«ã‚ãŸã‚Šã®ãƒ“ãƒƒãƒˆæ•° (bit/sample)WAV ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã¯8bitã‹16bit 16bit ãªã‚‰ã° 16(10 00)
-    :extent_size   , #2 byte æ‹¡å¼µéƒ¨åˆ†ã®ã‚µã‚¤ã‚º ãƒªãƒ‹ã‚¢PCMãªã‚‰ã°å­˜åœ¨ã—ãªã„
-    :extent_body   , #n byte æ‹¡å¼µéƒ¨åˆ† ãƒªãƒ‹ã‚¢PCMãªã‚‰ã°å­˜åœ¨ã—ãªã„
-    :data_tag      , #4 byte d' 'a' 't' 'a' 	data ãƒãƒ£ãƒ³ã‚¯
-    :data_size     , #4 byte ãƒã‚¤ãƒˆæ•°n 	æ³¢å½¢ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆæ•° 	ã€€
-    :data_body     , #n byte æ³¢å½¢ãƒ‡ãƒ¼ã‚¿
-    :time            #å†ç”Ÿæ™‚é–“ï¼ˆdata_size/data_speed)
+    :riff_header   , #4 byte R' 'I' 'F' 'F'  	RIFFƒwƒbƒ_  	@
+    :file_size     , #4 byte ‚±‚êˆÈ~‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY (ƒtƒ@ƒCƒ‹ƒTƒCƒY - 8) 	@ 	@
+    :wave_header   , #4 byte W' 'A' 'V' 'E' 	WAVEƒwƒbƒ_ 	RIFF‚Ìí—Ş‚ªWAVE‚Å‚ ‚é‚±‚Æ‚ğ‚ ‚ç‚í‚·
+    :fmt_difinit   , #4 byte f' 'm' 't' ' ' (©ƒXƒy[ƒX‚àŠÜ‚Ş) 	fmt ƒ`ƒƒƒ“ƒN 	ƒtƒH[ƒ}ƒbƒg‚Ì’è‹`
+    :fmt_size      , #4 byte ƒoƒCƒg” 	fmt ƒ`ƒƒƒ“ƒN‚ÌƒoƒCƒg” 	ƒŠƒjƒAPCM ‚È‚ç‚Î 16(10 00 00 00)
+    :fmt_id        , #2 byte ƒtƒH[ƒ}ƒbƒgID ƒŠƒjƒAPCM ‚È‚ç‚Î 1(01 00)
+    :channel_num   , #2 byte ƒ`ƒƒƒ“ƒlƒ‹”	ƒ‚ƒmƒ‰ƒ‹ ‚È‚ç‚Î 1(01 00) ƒXƒeƒŒƒI ‚È‚ç‚Î 2(02 00)
+    :sample_rate   , #4 byte ƒTƒ“ƒvƒŠƒ“ƒOƒŒ[ƒg	Hz 	44.1kHz ‚È‚ç‚Î 44100(44 AC 00 00)
+    :data_speed    , #4 byte ƒf[ƒ^‘¬“x (Byte/sec)44.1kHz 16bit ƒXƒeƒŒƒI ‚È‚ç‚Î 44100~2~2 = 176400(10 B1 02 00)
+    :block_size    , #2 byte ƒuƒƒbƒNƒTƒCƒY (Byte/sample~ƒ`ƒƒƒ“ƒlƒ‹”)	16bit ƒXƒeƒŒƒI ‚È‚ç‚Î 2~2 = 4(04 00)
+    :bit_per_sample, #2 byte ƒTƒ“ƒvƒ‹‚ ‚½‚è‚Ìƒrƒbƒg” (bit/sample)WAV ƒtƒH[ƒ}ƒbƒg‚Å‚Í8bit‚©16bit 16bit ‚È‚ç‚Î 16(10 00)
+    :extent_size   , #2 byte Šg’£•”•ª‚ÌƒTƒCƒY ƒŠƒjƒAPCM‚È‚ç‚Î‘¶İ‚µ‚È‚¢
+    :extent_body   , #n byte Šg’£•”•ª ƒŠƒjƒAPCM‚È‚ç‚Î‘¶İ‚µ‚È‚¢
+    :data_tag      , #4 byte d' 'a' 't' 'a' 	data ƒ`ƒƒƒ“ƒN
+    :data_size     , #4 byte ƒoƒCƒg”n 	”gŒ`ƒf[ƒ^‚ÌƒoƒCƒg” 	@
+    :data_body     , #n byte ”gŒ`ƒf[ƒ^
+    :time            #Ä¶ŠÔidata_size/data_speed)
                )    
 
   def initialize(file=nil)
@@ -52,8 +52,8 @@ class Wave
     when "String" 
       open(file) {|f| read(f)}
     else
-      #fileãŒä¸ãˆã‚‰ã‚Œãªã„ã¨ãã¯ãƒ˜ãƒƒãƒ€ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆ16ãƒ“ãƒƒãƒˆãƒ¢ãƒãƒ©ãƒ«ï¼‰ã§ä½œã‚‹ã€‚
-      #ä»¥ä¸‹ã®ãƒ¡ãƒ³ãƒã¯ç©º
+      #file‚ª—^‚¦‚ç‚ê‚È‚¢‚Æ‚«‚Íƒwƒbƒ_‚ğƒfƒtƒHƒ‹ƒg’li16ƒrƒbƒgƒ‚ƒmƒ‰ƒ‹j‚Åì‚éB
+      #ˆÈ‰º‚Ìƒƒ“ƒo‚Í‹ó
       # @file_size, @extent_size, @extent_body
       @riff_header    = "RIFF"
       @wave_header    = "WAVE"
@@ -113,7 +113,7 @@ class Wave
     self
   end
 
-  def copy #è‡ªåˆ†ã¨åŒã˜ãƒ‡ãƒ¼ã‚¿ã‚’æŒã¤ã€æ–°ã—ã„Waveã‚’ä½œã£ã¦è¿”ã™
+  def copy #©•ª‚Æ“¯‚¶ƒf[ƒ^‚ğ‚ÂAV‚µ‚¢Wave‚ğì‚Á‚Ä•Ô‚·
     new_w = Wave.new
     new_w.riff_header    = @riff_header    
     new_w.file_size      = @file_size
@@ -134,7 +134,7 @@ class Wave
   end
 
   def save(file_name)
-    #fileã‚µã‚¤ã‚ºã®è¨ˆç®—
+    #fileƒTƒCƒY‚ÌŒvZ
     @file_size = 4 + #wave_header   
       4 + #fmt_difinit   
       4 + #fmt_size      
@@ -147,13 +147,13 @@ class Wave
       4 + #data_tag      
       4 + #data_size     
       @data_size 
-    #ãƒ‡ãƒ¼ã‚¿ã®pack
+    #ƒf[ƒ^‚Ìpack
     if @channel_num == 2
       @data_body_raw = @data_body.pack("l*")
     else @channel_num == 1
       @data_body_raw = @data_body.pack("s*")
     end
-    #ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³ãƒ»æ›¸ãè¾¼ã¿
+    #ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“E‘‚«‚İ
     f = File.open(file_name,"w")
     f.binmode
     f.write(@riff_header)
@@ -178,7 +178,7 @@ class Wave
     @data_body.join("\n")
   end
 
-  def add(other) #åˆ¥ã®Waveã®æ³¢å½¢ã¨åˆæˆã™ã‚‹
+  def add(other) #•Ê‚ÌWave‚Ì”gŒ`‚Æ‡¬‚·‚é
     unless other.class == self.class 
       raise "Cannot add. Both files need to be WAVE." 
     end
@@ -196,7 +196,7 @@ class Wave
     new_w
   end
 
-  def sub(other) #å„ã‚µãƒ³ãƒ—ãƒ«ã®å€¤ã‚’åˆ¥ã®Waveã®å¯¾å¿œã™ã‚‹å€¤ã§æ¸›ç®—ã™ã‚‹
+  def sub(other) #ŠeƒTƒ“ƒvƒ‹‚Ì’l‚ğ•Ê‚ÌWave‚Ì‘Î‰‚·‚é’l‚ÅŒ¸Z‚·‚é
     unless other.class == self.class 
       raise "Cannot substruct. Both files need to be WAVE." 
     end
@@ -215,8 +215,8 @@ class Wave
     new_w
   end
 
-  def cat(other) #otherã®ãƒ‡ãƒ¼ã‚¿ã‚’è‡ªåˆ†ã®ãƒ‡ãƒ¼ã‚¿ã®å¾Œã‚ã«ãã£ã¤ã‘ã‚‹
-    #ãƒ¬ãƒ¼ãƒˆã®é•ã†éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãã£ã¤ã‘ã‚‹ã¨å¤‰ã«ãªã‚‹ã®ã§æ³¨æ„ï¼
+  def cat(other) #other‚Ìƒf[ƒ^‚ğ©•ª‚Ìƒf[ƒ^‚ÌŒã‚ë‚É‚­‚Á‚Â‚¯‚é
+    #ƒŒ[ƒg‚Ìˆá‚¤‰¹ºƒtƒ@ƒCƒ‹‚ğ‚­‚Á‚Â‚¯‚é‚Æ•Ï‚É‚È‚é‚Ì‚Å’ˆÓI
     unless other.class == self.class 
       raise "Cannot Concat. Both files need to be WAVE." 
     end
@@ -232,72 +232,4 @@ class Wave
     self
   end
 
-  def make_wave(time, exp) #æ³¢å½¢ä½œæˆã®å…±é€šå‡¦ç†
-    @time = time
-    body_size  = time * @sample_rate
-    @data_body = Array.new(body_size)
-    @data_size = body_size * @block_size
-    @data_body.each_index do |i|
-      @data_body[i] = exp.call(i)
-      @data_body[i] *= 32768 * @channel_num
-    end
-    self
-  end
-
-  def make_sin(freq, amp, time) #ãƒ‡ãƒ¼ã‚¿ã‚’ã‚µã‚¤ãƒ³æ³¢ã«ã™ã‚‹(å‘¨æ³¢æ•°ã€æŒ¯å¹…ã€æ™‚é–“)
-    exp = lambda {|i| amp * sin(2.0 * PI * freq * i / @sample_rate)}
-    make_wave(time, exp)
-  end
-
-  def make_saw(freq, amp, time) #ãƒ‡ãƒ¼ã‚¿ã‚’ãƒã‚³ã‚®ãƒªæ³¢ã«ã™ã‚‹(å‘¨æ³¢æ•°ã€æŒ¯å¹…ã€æ™‚é–“)
-    sample_per_freq = @sample_rate / freq
-    peak_pos = sample_per_freq / 2 #æ³¢å½¢ã®ãƒ”ãƒ¼ã‚¯ã®ä½ç½®
-    val_per_sample = amp / peak_pos
-    exp = lambda {|i| 
-      val = val_per_sample * (i % peak_pos)  
-      if i % sample_per_freq < peak_pos
-        val  
-      else
-        val - amp 
-      end
-    }
-    make_wave(time, exp)
-  end
-
-  def make_sin_saw(freq, amp, time) #ãƒ‡ãƒ¼ã‚¿ã‚’ãƒã‚³ã‚®ãƒªæ³¢ã«ã™ã‚‹(å‘¨æ³¢æ•°ã€æŒ¯å¹…ã€æ™‚é–“)
-    exp = lambda{|i| 
-      #sinã®æ›ã‘ã‚ã‚ã›ã§ãƒã‚³ã‚®ãƒªæ³¢ã‚’ä½œã‚‹
-      val = 0
-      1.upto(15) do |n|
-        val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate)
-      end
-      val
-    }
-    make_wave(time, exp)
-  end
-
-  def make_square(freq, amp, time) #ãƒ‡ãƒ¼ã‚¿ã‚’çŸ©å½¢æ³¢ã«ã™ã‚‹(å‘¨æ³¢æ•°ã€æŒ¯å¹…ã€æ™‚é–“)
-    sample_per_freq = @sample_rate / freq
-    peak_pos = sample_per_freq / 2 #æ³¢å½¢ã®ãƒ”ãƒ¼ã‚¯ã®ä½ç½®
-    exp = lambda {|i| 
-      if i % sample_per_freq < peak_pos
-        amp
-      else
-        -amp
-      end
-    }
-    make_wave(time, exp)
-  end
-  
-  def make_sin_square(freq, amp, time) #ãƒ‡ãƒ¼ã‚¿ã‚’çŸ©å½¢æ³¢ã«ã™ã‚‹(å‘¨æ³¢æ•°ã€æŒ¯å¹…ã€æ™‚é–“)
-    exp = lambda{|i| 
-      #sinã®æ›ã‘ã‚ã‚ã›ã§çŸ©å½¢æ³¢ã‚’ä½œã‚‹
-      val = 0
-      1.upto(15) do |n|
-        val += amp / n * sin(2.0 * PI * freq * i * n / @sample_rate) if n % 2 == 1
-      end
-      val
-    }
-    make_wave(time, exp)
-  end
 end

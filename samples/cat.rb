@@ -1,4 +1,4 @@
-require 'soundwave.rb'
+require 'lib/soundwave.rb'
 
 w1 = Wave.new("samples/wav/chimes.wav")
 w2 = Wave.new("samples/wav/chord.wav")
